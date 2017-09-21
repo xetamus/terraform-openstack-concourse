@@ -9,3 +9,4 @@ terraform.tfvars
 *.sw[op]
 
 graph.png
+crash.log
