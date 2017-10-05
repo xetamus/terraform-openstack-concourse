@@ -22,8 +22,10 @@ resource "openstack_compute_floatingip_v2" "concourse-web" {
   pool = "${var.external_network}"
 }
 
-/*resource "null_resource" "upload-concourse" {
-  depends_on = ["module.bosh-director"]
+resource "null_resource" "deploy-concourse" {
+  triggers {
+    bosh-director = "${module.bosh-director.deploy-bosh-id}"
+  }
 
   connection {
     type = "ssh"
@@ -45,32 +47,6 @@ resource "openstack_compute_floatingip_v2" "concourse-web" {
       "bosh -n -e ${var.prefix} -d concourse deploy concourse.yml"
     ]
   }
-}
-
-resource "null_resource" "deploy-concourse" {
-  triggers {
-    upload_concourse = "${null_resource.upload-concourse.id}"
-  }
-
-  depends_on = ["null_resource.upload-concourse"]
-
-  connection {
-    type = "ssh"
-    host = "${module.bosh-director.jumpbox-floating-ip}"
-    user = "ubuntu"
-    private_key = "${chomp(file("${var.ssh_privkey}"))}"
-  }
-
-  provisioner "file" {
-    content = "${data.template_file.concourse-manifest.rendered}"
-    destination = "~/concourse.yml"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "bosh -n -e ${var.prefix} -d concourse deploy concourse.yml"
-    ]
-  }
 
   provisioner "remote-exec" {
     when = "destroy"
@@ -78,4 +54,4 @@ resource "null_resource" "deploy-concourse" {
       "bosh -n -e ${var.prefix} -d concourse delete-deployment --force"
     ]
   }
-}*/
+}

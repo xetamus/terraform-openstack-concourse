@@ -6,6 +6,7 @@
 .terraform/
 
 terraform.tfvars
+*.tfplan
 *.sw[op]
 
 graph.png
