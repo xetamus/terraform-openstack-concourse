@@ -1,3 +1,7 @@
+variable "deploy_director" { default = true }
+variable "jumpbox_ip" { default = "" }
+variable "secgroup_id" { default = "" }
+
 variable "os_auth_url" { default = "" }
 variable "os_username" { default = "" }
 variable "os_password" { default = "" }

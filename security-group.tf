@@ -1,5 +1,5 @@
 resource "openstack_networking_secgroup_rule_v2" "concourse-http" {
-  security_group_id = "${module.bosh-director.bosh-secgroup-id}"
+  security_group_id = "${var.deploy_director ? module.bosh-director.secgroup_id : var.secgroup_id}"
   direction = "ingress"
   ethertype = "IPv4"
   protocol = "tcp"

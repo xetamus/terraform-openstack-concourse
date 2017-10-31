@@ -1,6 +1,8 @@
 module "bosh-director" {
   source = "github.com/xetamus/terraform-openstack-bosh"
 
+  resource_count = "${var.deploy_director ? 1 : 0}"
+
   os_auth_url = "${var.os_auth_url}"
   os_username = "${var.os_username}"
   os_password = "${var.os_password}"

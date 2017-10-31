@@ -1,5 +1,5 @@
 output "Jumpbox IP" {
-  value = "${module.bosh-director.jumpbox-floating-ip}"
+  value = "${var.deploy_director ? module.bosh-director.jumpbox_ip : var.jumpbox_ip}"
 }
 
 output "Jumpbox User" {

@@ -14,7 +14,7 @@ data "template_file" "concourse-manifest" {
     db_password = "${var.concourse_db_password}"
     worker_instances = "${var.concourse_worker_instances}"
     worker_vm_type = "${var.concourse_worker_vm_type}"
-    network = "${module.bosh-director.bosh-network-name}"
+    network = "${var.deploy_director ? module.bosh-director.bosh_network : "${var.prefix}-bosh-network"}" 
   }
 }
 
@@ -24,12 +24,12 @@ resource "openstack_compute_floatingip_v2" "concourse-web" {
 
 resource "null_resource" "deploy-concourse" {
   triggers {
-    bosh-director = "${module.bosh-director.deploy-bosh-id}"
+    bosh-director = "${var.deploy_director ? module.bosh-director.deploy-bosh-id : "1"}"
   }
 
   connection {
     type = "ssh"
-    host = "${module.bosh-director.jumpbox-floating-ip}"
+    host = "${var.deploy_director ? module.bosh-director.jumpbox_ip : var.jumpbox_ip}"
     user = "ubuntu"
     private_key = "${chomp(file("${var.ssh_privkey}"))}"
   }
