@@ -42,8 +42,8 @@ resource "null_resource" "deploy-concourse" {
   provisioner "remote-exec" {
     inline = [
       "bosh -n -e ${var.prefix} upload-stemcell https://bosh.io/d/stemcells/bosh-openstack-kvm-ubuntu-trusty-go_agent",
-      "bosh -n -e ${var.prefix} upload-release https://bosh.io/d/github.com/concourse/concourse",
-      "bosh -n -e ${var.prefix} upload-release https://bosh.io/d/github.com/cloudfoundry/garden-runc-release",
+      "bosh -n -e ${var.prefix} upload-release https://bosh.io/d/github.com/concourse/concourse?v=${var.concourse_version}",
+      "bosh -n -e ${var.prefix} upload-release https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=${var.garden_version}",
       "bosh -n -e ${var.prefix} -d concourse deploy concourse.yml"
     ]
   }
@@ -51,7 +51,9 @@ resource "null_resource" "deploy-concourse" {
   provisioner "remote-exec" {
     when = "destroy"
     inline = [
-      "bosh -n -e ${var.prefix} -d concourse delete-deployment --force"
+      "bosh -n -e ${var.prefix} -d concourse delete-deployment --force",
+      "bosh -n -e ${var.prefix} delete-release concourse",
+      "bosh -n -e ${var.prefix} delete-release garden-runc"
     ]
   }
 }

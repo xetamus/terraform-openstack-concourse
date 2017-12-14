@@ -33,6 +33,9 @@ variable "bosh_az" { default = "nova" }
 variable "director_ip" { default = "10.0.0.11" }
 variable "director_name" { default = "bosh01" }
 
+variable "concourse_version" { default = "3.5.0" }
+variable "garden_version" { default = "1.6.0" }
+
 variable "concourse_web_instances" { default = 1 }
 variable "concourse_web_vm_type" { default = "small" }
 variable "concourse_worker_instances" { default = 1 }
